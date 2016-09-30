@@ -13,6 +13,7 @@ export interface IAuthConfig {
   noTokenScheme?: boolean;
   tokenGetter: () => string | Promise<string>;
   tokenName: string;
+  /** Required for requesting new JWTs from a given authentication service */
   authService?: string;
   errCodes?: number[];
 }
@@ -116,6 +117,11 @@ export class AuthHttp {
       }
     } else {
       req.headers.set(this.config.headerName, this.config.headerPrefix + token);
+    }
+
+    if(this.config.authService != ''){
+
+    
     }
 
     return this.http.request(req);
