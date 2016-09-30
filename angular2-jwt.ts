@@ -15,6 +15,7 @@ export interface IAuthConfig {
   tokenName: string;
   /** Required for requesting new JWTs from a given authentication service */
   authService?: string;
+  tokenRefresh?: () => string | Promise<string>;
   errCodes?: number[];
 }
 
@@ -32,6 +33,7 @@ export class AuthConfig {
   public tokenGetter: () => string | Promise<string>;
   public tokenName: string;
   public authService: string;
+  public tokenRefresh: () => string | Promise<string>;
   public errCodes: number[];
 
   constructor(config: any = {}) {
@@ -49,6 +51,7 @@ export class AuthConfig {
     this.tokenGetter = config.tokenGetter || (() => localStorage.getItem(this.tokenName) as string);
     this.tokenName = config.tokenName || 'id_token';
     this.authService = config.authService || '';
+    this.tokenRefresh = config.tokenRefresh || (() => this.http.request(this.authService) as string);
     this.errCodes = config.errCodes || [];
   }
 
@@ -62,6 +65,7 @@ export class AuthConfig {
       tokenGetter: this.tokenGetter,
       tokenName: this.tokenName,
       authService: this.authService,
+      tokenRefresh: this.tokenRefresh,
       errCodes: this.errCodes
     };
   }
