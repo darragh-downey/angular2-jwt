@@ -13,6 +13,8 @@ export interface IAuthConfig {
   noTokenScheme?: boolean;
   tokenGetter: () => string | Promise<string>;
   tokenName: string;
+  authService?: string;
+  errCodes?: number[];
 }
 
 /**
@@ -28,6 +30,8 @@ export class AuthConfig {
   public noTokenScheme: boolean;
   public tokenGetter: () => string | Promise<string>;
   public tokenName: string;
+  public authService: string;
+  public errCodes: number[];
 
   constructor(config: any = {}) {
     this.globalHeaders = config.globalHeaders || [];
@@ -43,6 +47,8 @@ export class AuthConfig {
     this.noTokenScheme = config.noTokenScheme || false;
     this.tokenGetter = config.tokenGetter || (() => localStorage.getItem(this.tokenName) as string);
     this.tokenName = config.tokenName || 'id_token';
+    this.authService = config.authService || '';
+    this.errCodes = config.errCodes || [];
   }
 
   public getConfig(): IAuthConfig {
@@ -53,7 +59,9 @@ export class AuthConfig {
       noJwtError: this.noJwtError,
       noTokenScheme: this.noTokenScheme,
       tokenGetter: this.tokenGetter,
-      tokenName: this.tokenName
+      tokenName: this.tokenName,
+      authService: this.authService,
+      errCodes: this.errCodes
     };
   }
 
