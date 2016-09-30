@@ -12,7 +12,7 @@ export interface IAuthConfig {
   noJwtError: boolean;
   noTokenScheme?: boolean;
   tokenGetter: () => string | Promise<string>;
-  tokenName: string;
+  tokenNames: string[];
   /** Required for requesting new JWTs from a given authentication service */
   authService?: string;
   tokenRefresh?: () => string | Promise<string>;
@@ -31,7 +31,7 @@ export class AuthConfig {
   public noJwtError: boolean;
   public noTokenScheme: boolean;
   public tokenGetter: () => string | Promise<string>;
-  public tokenName: string;
+  public tokenNames: string[];
   public authService: string;
   public tokenRefresh: () => string | Promise<string>;
   public errCodes: number[];
@@ -49,7 +49,7 @@ export class AuthConfig {
     this.noJwtError = config.noJwtError || false;
     this.noTokenScheme = config.noTokenScheme || false;
     this.tokenGetter = config.tokenGetter || (() => localStorage.getItem(this.tokenName) as string);
-    this.tokenName = config.tokenName || 'id_token';
+    this.tokenNames = config.tokenNames || ['id_token'];
     this.authService = config.authService || '';
     this.tokenRefresh = config.tokenRefresh || (() => this.http.request(this.authService) as string);
     this.errCodes = config.errCodes || [];
@@ -63,7 +63,7 @@ export class AuthConfig {
       noJwtError: this.noJwtError,
       noTokenScheme: this.noTokenScheme,
       tokenGetter: this.tokenGetter,
-      tokenName: this.tokenName,
+      tokenNames: this.tokenNames,
       authService: this.authService,
       tokenRefresh: this.tokenRefresh,
       errCodes: this.errCodes
